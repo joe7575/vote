@@ -1,1 +1,0 @@
-Adds an API to allow players to vote, also adds kick voting.

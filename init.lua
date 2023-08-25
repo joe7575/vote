@@ -111,10 +111,12 @@ function vote.check_vote(voteset)
 	local all_players_voted = true
 	local players = minetest.get_connected_players()
 	for _, player in pairs(players) do
-		local name = player:get_player_name()
-		if not voteset.results.voted[name] then
-			all_players_voted = false
-			break
+		if minetest.check_player_privs(player, "miniminer") then
+			local name = player:get_player_name()
+			if not voteset.results.voted[name] then
+				all_players_voted = false
+				break
+			end
 		end
 	end
 
@@ -213,7 +215,9 @@ end)
 function vote.update_all_hud()
 	local players = minetest.get_connected_players()
 	for _, player in pairs(players) do
-		vote.update_hud(player)
+		if minetest.check_player_privs(player, "miniminer") then
+			vote.update_hud(player)
+		end
 	end
 	minetest.after(5, vote.update_all_hud)
 end
@@ -221,6 +225,7 @@ minetest.after(5, vote.update_all_hud)
 
 minetest.register_chatcommand("yes", {
 	privs = {
+		miniminer = true,
 		interact = true
 	},
 	func = function(name, params)
@@ -244,6 +249,7 @@ minetest.register_chatcommand("yes", {
 
 minetest.register_chatcommand("no", {
 	privs = {
+		miniminer = true,
 		interact = true
 	},
 	func = function(name, params)
@@ -267,6 +273,7 @@ minetest.register_chatcommand("no", {
 
 minetest.register_chatcommand("abstain", {
 	privs = {
+		miniminer = true,
 		interact = true
 	},
 	func = function(name, params)
